@@ -10,6 +10,9 @@ WORKDIR C:/build
 RUN powershell -Command Invoke-WebRequest -OutFile node.zip "https://nodejs.org/dist/v${Env:NODE_VERSION}/node-v${Env:NODE_VERSION}-win-x64.zip" -UseBasicParsing
 RUN powershell -Command if ((Get-FileHash node.zip -Algorithm sha256).Hash -ne $Env:NODE_SHA256) {exit 1}
 RUN powershell -Command Expand-Archive C:\build\node.zip C:\; Rename-Item c:\node-v${Env:NODE_VERSION}-win-x64 node
+# Clean up
+WORKDIR C:/node
+RUN powershell -Command Remove-Item c:\build -Force -Recurse
 
 RUN SETX PATH C:\node
 
